@@ -19,17 +19,14 @@ To make this workflow your own, follow these steps:
 
 1. **Import the Workflow:** Download the `.json` file from this repo and import it into your n8n instance.
 2. **Setup the Database:**
-    * Upload the provided `Automation_Template.xlsx` to your Google Drive and open it as Google Sheets.
+    * Upload the provided `FB_Group_Leads_Monitor.xlsx` to your Google Drive and open it as Google Sheets.
     * In the **"Settings"** tab, fill in your `TELEGRAM_CHAT_ID`, `TARGET_FB_GROUP`, and `PRIORITY_THRESHOLD`.
 3. **Connect n8n to Sheets:**
-    * In the **"Read Settings"** node (at the start), select your uploaded spreadsheet.
-    * In the **"Google Sheets - Append"** node (at the end), select the same spreadsheet and the "Leads" tab.
+    * In the **"Settings"** node (at the start), select your uploaded spreadsheet.
+    * In the **"Append row in sheet "** node (at the end), select the same spreadsheet and the "Leads" tab.
 4. **Setup Credentials:** Add your API keys for **Anthropic**, **Apify**, and **Telegram** in the n8n Credentials section.
-5. **Google Sheets Setup:**
-    * Create a Google Sheet with the following headers: `Original Post`, `Category`, `Sentiment`, `Summary`, `Priority`, and `URL`.
-    * In the **Google Sheets node**, select your Spreadsheet and the specific Sheet name.
-6. **Telegram Bot:** Ensure your bot is an administrator in the target group/channel to allow it to send messages.
-7. **Run:** Hit "Execute Workflow" and watch the leads flow in!
+5. **Telegram Bot:** Ensure your bot is an administrator in the target group/channel to allow it to send messages.
+6. **Run:** Hit "Execute Workflow" and watch the leads flow in!
 
 ## 📁 Repository Files
 * `Facebook Posts Scraper.json` - The n8n workflow file.
