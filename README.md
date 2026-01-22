@@ -34,3 +34,13 @@ To make this workflow your own, follow these steps:
 ## 📁 Repository Files
 * `Facebook Posts Scraper.json` - The n8n workflow file.
 * `FB_Group_Leads_Monitor.xlsx` - The Excel template with pre-defined columns and settings tab.
+
+## 🔗 Links & Resources
+* **Apify Actor used:** [Facebook Groups Scraper](https://apify.com/apify/facebook-groups-scraper)
+* **AI Model:** Claude 4.5 Sonnet by Anthropic
+
+## 📩 Contact
+Feel free to reach out for questions, collaborations, or just to connect!
+
+* **LinkedIn:** [Inbal Sertshuk/Link Here](https://www.linkedin.com/in/inbal-sertshuk-46858519/)
+* **GitHub:** [@InbalCodes](https://github.com/InbalCodes)
