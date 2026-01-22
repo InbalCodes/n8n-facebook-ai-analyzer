@@ -1,0 +1,374 @@
+{
+  "name": "Facebook Posts Scraper",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        96
+      ],
+      "id": "a559c953-dcf7-48bd-9635-0f1c1dec5fb4",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "claude-sonnet-4-5-20250929",
+          "mode": "list",
+          "cachedResultName": "claude-sonnet-4-5-20250929"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Analyze the following post text:\n{{ $json.text }}"
+            }
+          ]
+        },
+        "options": {
+          "system": "You are a social media data analyst. Your task is to analyze Facebook posts and return a structured JSON response.   Guidelines: 1. \"category\": Classify into [שאלה, המלצה, תלונה, פרסום, אחר]. 2. \"sentiment\": Classify into [חיובי, שלילי, ניטרלי]. 3. \"summary\": A one-sentence summary in Hebrew.  Rules: - Return ONLY valid JSON. - No introductory text, no conversational fillers, and no markdown code blocks (just the JSON itself). 4. \"priority\": Assign a score between 1 to 10 based on how actionable or urgent the post is. (10 = very urgent/high business potential, 1 = general chatter)."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.anthropic",
+      "typeVersion": 1,
+      "position": [
+        672,
+        96
+      ],
+      "id": "ce0b75c8-509a-4a9f-9bbc-d2083f659255",
+      "name": "Message a model",
+      "credentials": {
+        "anthropicApi": {
+          "id": "cCqqbtLjkO1AHwAL",
+          "name": "Anthropic account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "17t1ptuTc4W1g8Bm16YdhTEkZsfagT9am29ZmskS1vpY",
+          "mode": "list",
+          "cachedResultName": "FB_Group_Leads_Monitor",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17t1ptuTc4W1g8Bm16YdhTEkZsfagT9am29ZmskS1vpY/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Processed_Posts",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17t1ptuTc4W1g8Bm16YdhTEkZsfagT9am29ZmskS1vpY/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Sentiment": "={{ $json.sentiment }}",
+            "Summary": "={{ $json.summary }}",
+            "URL": "={{ $node[\"Apify\"].json[\"url\"] }}",
+            "Category": "={{ $json.category }}",
+            "Original Post": "={{ $node[\"Apify\"].json[\"text\"] }}",
+            "Priority": "={{ $json.priority }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Priority",
+              "displayName": "Priority",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Category",
+              "displayName": "Category",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Sentiment",
+              "displayName": "Sentiment",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Summary",
+              "displayName": "Summary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "URL",
+              "displayName": "URL",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Original Post",
+              "displayName": "Original Post",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1248,
+        0
+      ],
+      "id": "f0306af8-77d9-47e7-8976-0d8b7b051e47",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "YJad3MsAFrVpwsRP",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Settings').item.json.TELEGRAM_CHAT_ID }}",
+        "text": "=🚀 **הזדמנות חדשה זוהתה!**\n---\n🔥 **ציון חשיבות:** {{ $json.priority }}/10\n📁 **קטגוריה:** {{ $json.category }}\n📝 **סיכום:** {{ $json.summary }}\n\n🔗 [למעבר לפוסט המקורי]({{ $node[\"Apify\"].json[\"url\"] }})",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1472,
+        192
+      ],
+      "id": "3b17f04e-23ce-4a8d-8f96-2bd273887031",
+      "name": "Send a text message",
+      "webhookId": "416637a7-b143-47a7-bab0-05e2750fc54f",
+      "credentials": {
+        "telegramApi": {
+          "id": "7UasXfvduWntSoQ5",
+          "name": "Facebook Group New Lead"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "49f07e2d-5db1-48ef-94ed-221b07a29de7",
+              "name": "TELEGRAM_CHAT_ID",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "27c6f7ed-3af4-4bdc-beff-f642f049c3fc",
+              "name": "TARGET_FB_GROUP",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "f465538e-f9cd-433b-9c7a-e936b67c3f68",
+              "name": "PRIORITY_THRESHOLD",
+              "value": 8,
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        224,
+        96
+      ],
+      "id": "11429679-1aac-4b4a-b61d-b741ab95e780",
+      "name": "Settings"
+    },
+    {
+      "parameters": {
+        "operation": "Run actor and get dataset",
+        "actorId": {
+          "__rl": true,
+          "value": "2chN8UQcH1CfxLRNE",
+          "mode": "list",
+          "cachedResultName": "Facebook Groups Scraper (apify/facebook-groups-scraper)",
+          "cachedResultUrl": "https://console.apify.com/actors/2chN8UQcH1CfxLRNE/input"
+        },
+        "customBody": "={\n  \"resultsLimit\": 10,\n  \"startUrls\": [\n    {\n      \"url\": \"{{ $json.TARGET_FB_GROUP }}\"\n    }\n  ],\n  \"viewOption\": \"CHRONOLOGICAL\"\n}",
+        "timeout": 60,
+        "authentication": "apifyOAuth2Api"
+      },
+      "type": "@apify/n8n-nodes-apify.apify",
+      "typeVersion": 1,
+      "position": [
+        448,
+        96
+      ],
+      "id": "a95bbd99-0aef-42b6-8607-b7a2fd88de8a",
+      "name": "Apify",
+      "credentials": {
+        "apifyOAuth2Api": {
+          "id": "yjmrlLtED3u6X1BA",
+          "name": "Apify account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const rawText = $json.content[0].text; \n\nif (!rawText) {\n  return { error: \"No text found in input\" };\n}\n\nconst jsonMatch = rawText.match(/\\{[\\s\\S]*\\}/); \n\nif (jsonMatch) {\n  try {\n    return JSON.parse(jsonMatch[0]);\n  } catch (e) {\n    return { error: \"Invalid JSON format\", originalText: rawText };\n  }\n} else {\n  return { error: \"Could not find JSON brackets\", originalText: rawText };\n}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1024,
+        96
+      ],
+      "id": "aca18785-5552-41a8-b340-7fe2f693d9e0",
+      "name": "Parse Claude Results"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "5e017387-9e7e-4e91-a287-4537a7e165c8",
+              "leftValue": "={{ $json.priority }}",
+              "rightValue": "={{ $('Settings').item.json.PRIORITY_THRESHOLD }}",
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        1248,
+        192
+      ],
+      "id": "1d538d89-a56c-4f1d-8a24-f7c1808bab80",
+      "name": "Get Only High Priority Posts"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Settings",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "Parse Claude Results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Settings": {
+      "main": [
+        [
+          {
+            "node": "Apify",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Apify": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Claude Results": {
+      "main": [
+        [
+          {
+            "node": "Get Only High Priority Posts",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Only High Priority Posts": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "4042ea67-5ce3-4764-be2f-90be5455b409",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "02b2c9f7af125809c04048003cda25eff918401f732ad2a9228d5ff437ce8c82"
+  },
+  "id": "KyNYwO0O4PeUWB4UV8DWD",
+  "tags": []
+}
