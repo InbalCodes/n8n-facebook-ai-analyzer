@@ -1,6 +1,8 @@
 # Facebook Group Lead Analyzer (n8n + AI)
 
-<img width="3073" height="844" alt="image" src="https://github.com/user-attachments/assets/ed758071-3931-412b-ad7d-407d6aee69f4" />
+
+<img width="3153" height="873" alt="image" src="https://github.com/user-attachments/assets/0636f4f6-b8d1-4fa6-92a5-92368ea9ff46" />
+
 
 An advanced automation workflow that scrapes Facebook group posts, performs semantic analysis using AI (Claude 4.5), manages a database, and sends real-time high-priority alerts.
 
@@ -16,14 +18,19 @@ An advanced automation workflow that scrapes Facebook group posts, performs sema
 To make this workflow your own, follow these steps:
 
 1. **Import the Workflow:** Download the `.json` file from this repo and import it into your n8n instance.
-2. **Setup Credentials:** Add your API keys for **Anthropic**, **Apify**, **Google Sheets**, and **Telegram** in the n8n Credentials section.
-3. **Personalize Settings:**
-    * Locate the node named **"Settings"** at the beginning of the workflow.
-    * Update the following fields:
-        * `TELEGRAM_CHAT_ID`: Your unique Telegram chat or group ID.
-        * `TARGET_FB_GROUP`: The URL of the Facebook group you wish to scan.
-        * `PRIORITY_THRESHOLD`: Set the minimum score (e.g., 8) for alerts.
-4. **Google Sheets Setup:**
+2. **Setup the Database:**
+    * Upload the provided `Automation_Template.xlsx` to your Google Drive and open it as Google Sheets.
+    * In the **"Settings"** tab, fill in your `TELEGRAM_CHAT_ID`, `TARGET_FB_GROUP`, and `PRIORITY_THRESHOLD`.
+3. **Connect n8n to Sheets:**
+    * In the **"Read Settings"** node (at the start), select your uploaded spreadsheet.
+    * In the **"Google Sheets - Append"** node (at the end), select the same spreadsheet and the "Leads" tab.
+4. **Setup Credentials:** Add your API keys for **Anthropic**, **Apify**, and **Telegram** in the n8n Credentials section.
+5. **Google Sheets Setup:**
     * Create a Google Sheet with the following headers: `Original Post`, `Category`, `Sentiment`, `Summary`, `Priority`, and `URL`.
     * In the **Google Sheets node**, select your Spreadsheet and the specific Sheet name.
-5. **Telegram Bot:** Ensure your bot is an administrator in the target group/channel to allow it to send messages.
+6. **Telegram Bot:** Ensure your bot is an administrator in the target group/channel to allow it to send messages.
+7. **Run:** Hit "Execute Workflow" and watch the leads flow in!
+
+## 📁 Repository Files
+* `Facebook Posts Scraper.json` - The n8n workflow file.
+* `FB_Group_Leads_Monitor.xlsx` - The Excel template with pre-defined columns and settings tab.
