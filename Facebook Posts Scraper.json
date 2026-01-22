@@ -60,7 +60,7 @@
           "__rl": true,
           "value": "gid=0",
           "mode": "list",
-          "cachedResultName": "Processed_Posts",
+          "cachedResultName": "Leads",
           "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17t1ptuTc4W1g8Bm16YdhTEkZsfagT9am29ZmskS1vpY/edit#gid=0"
         },
         "columns": {
@@ -122,6 +122,16 @@
               "canBeUsedToMatch": true
             },
             {
+              "id": "Date",
+              "displayName": "Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
               "id": "Original Post",
               "displayName": "Original Post",
               "required": false,
@@ -172,41 +182,6 @@
           "name": "Facebook Group New Lead"
         }
       }
-    },
-    {
-      "parameters": {
-        "assignments": {
-          "assignments": [
-            {
-              "id": "49f07e2d-5db1-48ef-94ed-221b07a29de7",
-              "name": "TELEGRAM_CHAT_ID",
-              "value": "",
-              "type": "string"
-            },
-            {
-              "id": "27c6f7ed-3af4-4bdc-beff-f642f049c3fc",
-              "name": "TARGET_FB_GROUP",
-              "value": "",
-              "type": "string"
-            },
-            {
-              "id": "f465538e-f9cd-433b-9c7a-e936b67c3f68",
-              "name": "PRIORITY_THRESHOLD",
-              "value": 8,
-              "type": "number"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
-      "position": [
-        224,
-        96
-      ],
-      "id": "11429679-1aac-4b4a-b61d-b741ab95e780",
-      "name": "Settings"
     },
     {
       "parameters": {
@@ -283,6 +258,39 @@
       ],
       "id": "1d538d89-a56c-4f1d-8a24-f7c1808bab80",
       "name": "Get Only High Priority Posts"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "17t1ptuTc4W1g8Bm16YdhTEkZsfagT9am29ZmskS1vpY",
+          "mode": "list",
+          "cachedResultName": "FB_Group_Leads_Monitor",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17t1ptuTc4W1g8Bm16YdhTEkZsfagT9am29ZmskS1vpY/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 2128656248,
+          "mode": "list",
+          "cachedResultName": "Settings",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17t1ptuTc4W1g8Bm16YdhTEkZsfagT9am29ZmskS1vpY/edit#gid=2128656248"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        224,
+        96
+      ],
+      "id": "931dd987-433f-49a9-9127-ecbb6fc12733",
+      "name": "Settings",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "YJad3MsAFrVpwsRP",
+          "name": "Google Sheets account"
+        }
+      }
     }
   ],
   "pinData": {},
@@ -303,17 +311,6 @@
         [
           {
             "node": "Parse Claude Results",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Settings": {
-      "main": [
-        [
-          {
-            "node": "Apify",
             "type": "main",
             "index": 0
           }
@@ -357,6 +354,17 @@
           }
         ]
       ]
+    },
+    "Settings": {
+      "main": [
+        [
+          {
+            "node": "Apify",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "active": false,
@@ -364,7 +372,7 @@
     "executionOrder": "v1",
     "availableInMCP": false
   },
-  "versionId": "4042ea67-5ce3-4764-be2f-90be5455b409",
+  "versionId": "6b955bb4-a31b-48a2-912a-ccc45a13d87f",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "02b2c9f7af125809c04048003cda25eff918401f732ad2a9228d5ff437ce8c82"
